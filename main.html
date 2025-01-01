@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Channel Website</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: yellow;
+    }
+
+    nav {
+      background-color: #333;
+      color: white;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      margin: 0 15px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .header {
+      text-align: center;
+      padding: 50px 20px;
+    }
+
+    .header h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .header img {
+      max-width: 100%;
+      height: auto;
+      border: 5px solid black;
+    }
+
+    .content {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .content p {
+      font-size: 20px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#videos">Videos</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <!-- Header Section -->
+  <div class="header" id="home">
+    <h1>Welcome to My YouTube Channel</h1>
+    <img src="your-image-url-here.jpg" alt="Channel Banner">
+  </div>
+
+  <!-- Content Section -->
+  <div class="content" id="videos">
+    <h2>Featured Videos</h2>
+    <p>Here you can explore the latest videos from the channel!</p>
+  </div>
+
+  <div class="content" id="about">
+    <h2>About the Channel</h2>
+    <p>Learn more about the content and inspiration behind this channel.</p>
+  </div>
+
+  <div class="content" id="contact">
+    <h2>Contact</h2>
+    <p>Want to get in touch? Drop a message or connect via social media!</p>
+  </div>
+</body>
+</html>
