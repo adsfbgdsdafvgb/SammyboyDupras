@@ -58,6 +58,32 @@
     .hidden {
       display: none;
     }
+
+    .videos-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .video {
+      width: 300px;
+      text-align: center;
+    }
+
+    iframe {
+      width: 100%;
+      height: 200px;
+    }
+
+    .contact-page a {
+      color: white; /* Email font color */
+      text-decoration: none;
+      font-size: 18px;
+      margin: 10px 0;
+      display: block;
+    }
   </style>
   <script>
     function showSection(sectionId) {
@@ -84,7 +110,31 @@
     // Initialize on the home page
     window.onload = () => {
       showSection('home');
+      fetchVideos(); // Fetch videos when the page loads
     };
+
+    const API_KEY = "AIzaSyAyifwGS2dE1qIPau2rQYyRVzGEUp4ynDw"; // Your API Key
+    const CHANNEL_ID = "UCCdeS3H7EUE9hR0l2S3dW3Q"; // Your Channel ID
+    const videosContainer = document.getElementById("videos");
+
+    async function fetchVideos() {
+      const response = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=snippet&type=video&order=date&maxResults=10`);
+      const data = await response.json();
+
+      data.items.forEach(item => {
+        const videoId = item.id.videoId;
+        const videoTitle = item.snippet.title;
+
+        const videoElement = `
+          <div class="video">
+            <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+            <p>${videoTitle}</p>
+          </div>
+        `;
+
+        videosContainer.innerHTML += videoElement;
+      });
+    }
   </script>
 </head>
 <body>
@@ -109,20 +159,9 @@
   </div>
 
   <!-- Videos Section -->
-  <div class="content content-section hidden" id="videos">
+  <div class="content content-section hidden" id="videos" style="background: linear-gradient(to bottom, red, orange, yellow, green, blue, indigo, violet);">
     <h2>Videos</h2>
-    <select>
-      <option>Cringiest</option>
-      <option>Longest</option>
-      <option>Shortest</option>
-      <option>Most "Sammy boy"</option>
-      <option>Fan Favorites</option>
-      <option>Most funny</option>
-      <option>Newest</option>
-      <option>Oldest</option>
-      <option>Collabs</option>
-      <option>Solo</option>
-    </select>
+    <div class="videos-container"></div>
   </div>
 
   <!-- About Section -->
@@ -136,12 +175,20 @@
       <img src="IMG_0974.JPEG" alt="Image 4">
       <img src="IMG_0973.JPEG" alt="Image 5">
       <img src="IMG_3863.JPEG" alt="Image 6">
+      <h1>About me:</h1>
+      <h2> I like to get good grades, fantasize about being a physicist, hang out with friends, </h2>
+      <h3> and be myself. Some of my hobbies include watching porn, playing obscure video games, </h3>
+      <h4> reading books for English assignments, grinding History Bowl, and being myself.</h4>
+      <h5> I don't like watching TV or listening to music. </h5>
     </div>
     <p>More information about the channel goes here.</p>
+    <h1> My channel was created because I was a bored little boy with nothing to do because I spent all my time </h1>
+    <h2> hanging out with my autistic friend. It started as a PC building channel before devolving into nonsense with my brother. </h2>
+    <h3> I hope you enjoy it!</h3>
   </div>
 
   <!-- Contact Section -->
-  <div class="content content-section hidden" id="contact">
+  <div class="content content-section hidden" id="contact" style="background: linear-gradient(to bottom, red, orange, yellow, green, blue, indigo, violet);">
     <h2>Contact</h2>
     <a href="mailto:samgabedupras@gmail.com">samgabedupras@gmail.com</a>
     <a href="mailto:26sdupras@gmail.com">26sdupras@gmail.com</a>
