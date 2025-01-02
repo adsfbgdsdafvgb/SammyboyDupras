@@ -107,33 +107,48 @@
       }
     }
 
-    // Initialize on the home page
-    window.onload = () => {
-      showSection('home');
-      fetchVideos(); // Fetch videos when the page loads
-    };
 
-    const API_KEY = "AIzaSyAyifwGS2dE1qIPau2rQYyRVzGEUp4ynDw"; // Your API Key
-    const CHANNEL_ID = "UCCdeS3H7EUE9hR0l2S3dW3Q"; // Your Channel ID
-    const videosContainer = document.getElementById("videos");
 
-    async function fetchVideos() {
-      const response = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=snippet&type=video&order=date&maxResults=10`);
-      const data = await response.json();
+ const API_KEY = "AIzaSyAyifwGS2dE1qIPau2rQYyRVzGEUp4ynDw"; // Your API Key
+const CHANNEL_ID = "UCCdeS3H7EUE9hR0l2S3dW3Q"; // Your Channel ID
+const videosContainer = document.querySelector(".videos-container");
 
-      data.items.forEach(item => {
-        const videoId = item.id.videoId;
-        const videoTitle = item.snippet.title;
+async function fetchVideos() {
+  try {
+    const response = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=snippet&type=video&order=date&maxResults=10`);
+    const data = await response.json();
 
-        const videoElement = `
-          <div class="video">
-            <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
-            <p>${videoTitle}</p>
-          </div>
-        `;
+    if (data.error) {
+      console.error("YouTube API Error:", data.error.message);
+      return;
+    }
 
-        videosContainer.innerHTML += videoElement;
-      });
+    console.log("API Response:", data); // Debugging
+
+    data.items.forEach(item => {
+      const videoId = item.id.videoId;
+      const videoTitle = item.snippet.title;
+
+      const videoElement = `
+        <div class="video">
+          <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+          <p>${videoTitle}</p>
+        </div>
+      `;
+
+      videosContainer.innerHTML += videoElement;
+    });
+  } catch (error) {
+    console.error("Error fetching videos:", error);
+  }
+}
+
+// Fetch videos on page load
+window.onload = () => {
+  showSection('home');
+  fetchVideos();
+};
+
     }
   </script>
 </head>
