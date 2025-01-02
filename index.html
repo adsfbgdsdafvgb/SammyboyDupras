@@ -72,27 +72,40 @@
         selectedSection.classList.remove('hidden');
       }
 
-      // Hide the giant picture
+      // Show or hide the header depending on the section
       const header = document.querySelector('.header');
-      if (header) {
+      if (sectionId === 'home') {
+        header.classList.remove('hidden');
+      } else {
         header.classList.add('hidden');
       }
     }
+
+    // Initialize on the home page
+    window.onload = () => {
+      showSection('home');
+    };
   </script>
 </head>
 <body>
   <!-- Navigation Bar -->
   <nav>
+    <a onclick="showSection('home')">Home</a>
     <a onclick="showSection('videos')">Videos</a>
     <a onclick="showSection('about')">About</a>
     <a onclick="showSection('contact')">Contact</a>
-    <a onclick="showsection('home')">Home</a>\
   </nav>
+
+  <!-- Header Section -->
+  <div class="header">
+    <h1>Sammy Boy Dupras</h1>
+    <img src="IMG_0976.JPEG" alt="Channel Banner">
+  </div>
 
   <!-- Home Section -->
   <div class="content content-section hidden" id="home">
-    <h1>Sammy Boy Dupras</h1>
-    <img src="IMG_0976.JPEG" alt="Channel Banner">
+    <h1>Welcome to Sammy Boy Dupras's Channel!</h1>
+    <p>This is the home page of my amazing YouTube journey.</p>
   </div>
 
   <!-- Videos Section -->
