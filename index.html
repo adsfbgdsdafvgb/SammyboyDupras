@@ -109,6 +109,37 @@
 
 
 
+
+    }
+  </script>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav>
+    <a onclick="showSection('home')">Home</a>
+    <a onclick="showSection('videos')">Videos</a>
+    <a onclick="showSection('about')">About</a>
+    <a onclick="showSection('contact')">Contact</a>
+  </nav>
+
+  <!-- Header Section -->
+  <div class="header">
+    <h1>Sammy Boy Dupras</h1>
+    <img src="IMG_0976.JPEG" alt="Channel Banner">
+  </div>
+
+  <!-- Home Section -->
+  <div class="content content-section hidden" id="home">
+    <h1>Welcome to Sammy Boy Dupras's Channel!</h1>
+    <p>This is the home page of my amazing YouTube journey.</p>
+  </div>
+
+  <!-- Videos Section -->
+  <div class="content content-section hidden" id="videos" style="background: linear-gradient(to bottom, red, orange, yellow, green, blue, indigo, violet);">
+    <h2>Videos</h2>
+    <div class="videos-container"></div>
+
+    
  const API_KEY = "AIzaSyAyifwGS2dE1qIPau2rQYyRVzGEUp4ynDw"; // Your API Key
 const CHANNEL_ID = "UCCdeS3H7EUE9hR0l2S3dW3Q"; // Your Channel ID
 const videosContainer = document.querySelector(".videos-container");
@@ -148,35 +179,6 @@ window.onload = () => {
   showSection('home');
   fetchVideos();
 };
-
-    }
-  </script>
-</head>
-<body>
-  <!-- Navigation Bar -->
-  <nav>
-    <a onclick="showSection('home')">Home</a>
-    <a onclick="showSection('videos')">Videos</a>
-    <a onclick="showSection('about')">About</a>
-    <a onclick="showSection('contact')">Contact</a>
-  </nav>
-
-  <!-- Header Section -->
-  <div class="header">
-    <h1>Sammy Boy Dupras</h1>
-    <img src="IMG_0976.JPEG" alt="Channel Banner">
-  </div>
-
-  <!-- Home Section -->
-  <div class="content content-section hidden" id="home">
-    <h1>Welcome to Sammy Boy Dupras's Channel!</h1>
-    <p>This is the home page of my amazing YouTube journey.</p>
-  </div>
-
-  <!-- Videos Section -->
-  <div class="content content-section hidden" id="videos" style="background: linear-gradient(to bottom, red, orange, yellow, green, blue, indigo, violet);">
-    <h2>Videos</h2>
-    <div class="videos-container"></div>
   </div>
 
   <!-- About Section -->
