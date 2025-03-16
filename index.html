@@ -77,12 +77,26 @@
       height: 200px;
     }
 
-    .contact-page a {
-      color: white; /* Email font color */
-      text-decoration: none;
-      font-size: 18px;
-      margin: 10px 0;
-      display: block;
+    .pagination {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .pagination button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .search-bar {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .search-bar input {
+      width: 60%;
+      padding: 10px;
+      font-size: 16px;
     }
   </style>
 </head>
@@ -110,36 +124,23 @@
   <!-- Videos Section -->
   <div class="content content-section hidden" id="videos" style="background: linear-gradient(to bottom, red, orange, yellow, green, blue, indigo, violet);">
     <h2>Videos</h2>
-    <div class="videos-container" id="videos-container"></div>
-  </div>
+    
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search videos..." oninput="searchVideos()">
+    </div>
 
-  <!-- About Section -->
-  <div class="content content-section hidden" id="about">
-    <h2>Sammy Boy through the years</h2>
-    <p>Welcome to the About page! Here are some photos from the channel:</p>
-    <div class="about-page">
-      <img src="IMG_0976.JPEG" alt="Image 1">
-      <img src="IMG_0542.JPEG" alt="Image 2">
-      <img src="IMG_0975.JPEG" alt="Image 3">
-      <img src="IMG_0974.JPEG" alt="Image 4">
-      <img src="IMG_0973.JPEG" alt="Image 5">
-      <img src="IMG_3863.JPEG" alt="Image 6">
+    <div class="videos-container" id="videos-container"></div>
+
+    <!-- Pagination Buttons -->
+    <div class="pagination">
+      <button onclick="prevPage()" id="prevPageBtn" disabled>Previous</button>
+      <button onclick="nextPage()" id="nextPageBtn">Next</button>
     </div>
   </div>
 
-  <!-- Contact Section -->
-  <div class="content content-section hidden" id="contact" style="background: linear-gradient(to bottom, red, orange, yellow, green, blue, indigo, violet);">
-    <h2>Contact</h2>
-    <a href="mailto:samgabedupras@gmail.com">samgabedupras@gmail.com</a>
-    <a href="mailto:26sdupras@gmail.com">26sdupras@gmail.com</a>
-    <p><a href="#" onclick="sendTextMessage()">Click here to send a text message</a></p>
-  </div>
-
-  <!-- JavaScript Moved to Bottom of Body -->
   <script>
     function showSection(sectionId) {
-      console.log(`Switching to section: ${sectionId}`); // Debug log
-
       document.querySelectorAll('.content-section').forEach(section => {
         section.classList.add('hidden');
       });
@@ -147,83 +148,85 @@
       const selectedSection = document.getElementById(sectionId);
       if (selectedSection) {
         selectedSection.classList.remove('hidden');
-        console.log(`Section ${sectionId} is now visible.`); // Debug log
       }
 
       const header = document.querySelector('.header');
-      if (sectionId === 'home') {
-        header.classList.remove('hidden');
-      } else {
-        header.classList.add('hidden');
-      }
+      header.classList.toggle('hidden', sectionId !== 'home');
 
       if (sectionId === 'videos') {
-        fetchVideos(); // Fetch videos when user switches to Videos page
+        fetchVideos();
       }
     }
 
-    // Initialize on the home page
+    const API_KEY = "AIzaSyBGqzKVR7xh-eHSfA4DFIt2mV2tUNvSBLE"; 
+    const CHANNEL_ID = "UCCdeS3H7EUE9hR0l2S3dW3Q"; 
+    let nextPageToken = "";
+    let prevPageToken = "";
+
+    async function fetchVideos(pageToken = "") {
+      try {
+        const videosContainer = document.getElementById("videos-container");
+        videosContainer.innerHTML = ""; 
+
+        const response = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=snippet&type=video&order=date&maxResults=10&pageToken=${pageToken}`);
+        const data = await response.json();
+
+        if (data.error) {
+          console.error("YouTube API Error:", data.error.message);
+          return;
+        }
+
+        data.items.forEach(item => {
+          if (item.id && item.id.videoId) {
+            const videoId = item.id.videoId;
+            const videoTitle = item.snippet.title;
+
+            const videoElement = `
+              <div class="video">
+                <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+                <p>${videoTitle}</p>
+              </div>
+            `;
+            videosContainer.innerHTML += videoElement;
+          }
+        });
+
+        nextPageToken = data.nextPageToken || "";
+        prevPageToken = data.prevPageToken || "";
+
+        document.getElementById("nextPageBtn").disabled = !nextPageToken;
+        document.getElementById("prevPageBtn").disabled = !prevPageToken;
+
+      } catch (error) {
+        console.error("Error fetching videos:", error);
+      }
+    }
+
+    function nextPage() {
+      if (nextPageToken) {
+        fetchVideos(nextPageToken);
+      }
+    }
+
+    function prevPage() {
+      if (prevPageToken) {
+        fetchVideos(prevPageToken);
+      }
+    }
+
+    function searchVideos() {
+      const searchInput = document.getElementById("searchInput").value.toLowerCase();
+      const videos = document.querySelectorAll(".video");
+
+      videos.forEach(video => {
+        const title = video.querySelector("p").textContent.toLowerCase();
+        video.style.display = title.includes(searchInput) ? "block" : "none";
+      });
+    }
+
     window.onload = () => {
       showSection('home');
     };
-
-    const API_KEY = "AIzaSyBGqzKVR7xh-eHSfA4DFIt2mV2tUNvSBLE"; // Your API Key
-    const CHANNEL_ID = "UCCdeS3H7EUE9hR0l2S3dW3Q"; // Your Channel ID
-
-   async function fetchVideos(pageToken = "") {
-  try {
-    console.log("Fetching videos..."); // Debugging message
-
-    const videosContainer = document.querySelector(".videos-container");
-
-    if (!videosContainer) {
-      console.error("Error: .videos-container not found in the DOM.");
-      return;
-    }
-
-    const API_URL = `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=snippet&type=video&order=date&maxResults=50&pageToken=${pageToken}`;
-    
-    const response = await fetch(API_URL);
-    const data = await response.json();
-
-    if (data.error) {
-      console.error("YouTube API Error:", data.error.message);
-      return;
-    }
-
-    console.log("API Response:", data); // Debugging: Check if more than 10 videos are received
-
-    data.items.forEach(item => {
-      if (item.id && item.id.videoId) {  // Ensure videoId exists
-        const videoId = item.id.videoId;
-        const videoTitle = item.snippet.title;
-
-        const videoElement = `
-          <div class="video">
-            <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
-            <p>${videoTitle}</p>
-          </div>
-        `;
-
-        videosContainer.innerHTML += videoElement;
-      } else {
-        console.warn("Skipping item due to missing videoId:", item);
-      }
-    });
-
-    // Check if more videos exist (pagination)
-    if (data.nextPageToken) {
-      console.log("Fetching more videos...");
-      await fetchVideos(data.nextPageToken); // Recursively fetch next batch
-    } else {
-      console.log("All videos loaded!");
-    }
-
-  } catch (error) {
-    console.error("Error fetching videos:", error);
-  }
-}
-
   </script>
 </body>
 </html>
