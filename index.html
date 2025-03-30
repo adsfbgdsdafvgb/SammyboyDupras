@@ -160,7 +160,7 @@
       <img src="IMG_0976.JPEG" alt="About Photo5">
       <img src="IMG_3863.JPEG" alt="About Photo6">
       <div class="bio">
-        <p id="bioText">This is a placeholder bio for Sammy Boy Dupras. You can update this section to share anything you'd like about yourself — your interests, hobbies, or YouTube journey!</p>
+        <p id="bioText">Hello! My name is Sammy Boy!!!! I also go by Samantha, Sam I am, Sammyuel, Sammy Boy, Asian Boy Dupras, Samuel L Jackson, Sam Smith, Sam Cooke, and Sammy!!!!! Some of my hobbies include watching porn, drinking milk like a cat, eating cereal, being a school geek, failing to ask out girls, hanging out with autistic people beause it gives me a hard on, seeing my friends naked (happened more than once!) and being a basic sports fan!!!! Some of my accomplishments include my GPA, and...well I can't think of anything else!!! Some fun facts about me include that I tried to ask out a girl one time and she said no so I decided to mope around and be a wittle sad boy!!!! My favorite movie is The Emoji Movie, my favorite song is Lucid Dreams by Juice WRLD, and my favorite food is dick!!!! Feel free to explore my website!!!</p>
       </div>
     </div>
   </div>
@@ -169,7 +169,7 @@
   <div class="content content-section hidden" id="contact">
     <h2>Contact</h2>
     <p>
-      <a href="mailto:samgabedupras@gmail.com">Email</a> |
+      <a href="mailto:samgabedupras@gmail.com" target="_blank">Email</a> |
       <a href="sms:+13156797499">Text</a>
     </p>
 
@@ -178,6 +178,7 @@
       <textarea id="messageText" placeholder="Your message..." required></textarea><br>
       <button type="submit">Send Message</button>
     </form>
+    <a id="sendLink" style="display: none;">Send</a>
   </div>
 
   <script>
@@ -253,12 +254,11 @@
       fetchVideos();
     });
 
-    document.getElementById('textForm').addEventListener('submit', async function (e) {
+    document.getElementById('textForm').addEventListener('submit', function (e) {
       e.preventDefault();
       const message = document.getElementById('messageText').value;
-      const smsEmail = "3154401204@txt.att.net";
-      window.open(`mailto:3154401204@txt.att.net?body=${encodeURIComponent(message)}`, '_blank');
-
+      const mailto = `https://mail.google.com/mail/?view=cm&fs=1&to=3156797499@vtext.com&body=${encodeURIComponent(message)}`;
+      window.open(mailto, '_blank');
     });
 
     window.onload = () => {
