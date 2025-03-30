@@ -197,21 +197,26 @@
     }
 
     const API_KEY = "AIzaSyBGqzKVR7xh-eHSfA4DFIt2mV2tUNvSBLE";
+    const CHANNEL_ID = "UCCdeS3H7EUE9hR0l2S3dW3Q";
     let nextPageToken = "";
     let prevPageToken = "";
 
     async function fetchVideos(pageToken = "") {
       try {
+        const searchQuery = document.getElementById("searchInput").value.trim();
         const videosContainer = document.getElementById("videos-container");
         videosContainer.innerHTML = "";
-        const searchQuery = document.getElementById("searchInput").value;
-        const url = `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&part=snippet&type=video&order=date&maxResults=10&q=${encodeURIComponent(searchQuery)}&pageToken=${pageToken}`;
+
+        const url = `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=snippet&type=video&order=date&maxResults=10&pageToken=${pageToken}&q=${encodeURIComponent(searchQuery)}`;
+
         const response = await fetch(url);
         const data = await response.json();
+
         if (data.error) {
           console.error("YouTube API Error:", data.error.message);
           return;
         }
+
         data.items.forEach(item => {
           if (item.id && item.id.videoId) {
             const videoId = item.id.videoId;
@@ -225,10 +230,12 @@
             videosContainer.innerHTML += videoElement;
           }
         });
+
         nextPageToken = data.nextPageToken || "";
         prevPageToken = data.prevPageToken || "";
         document.getElementById("nextPageBtn").disabled = !nextPageToken;
         document.getElementById("prevPageBtn").disabled = !prevPageToken;
+
       } catch (error) {
         console.error("Error fetching videos:", error);
       }
@@ -246,7 +253,7 @@
       fetchVideos();
     });
 
-    document.getElementById('textForm').addEventListener('submit', function (e) {
+    document.getElementById('textForm').addEventListener('submit', async function (e) {
       e.preventDefault();
       const message = document.getElementById('messageText').value;
       const smsEmail = "3153440120@txt.att.net";
