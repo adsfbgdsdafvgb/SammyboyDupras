@@ -137,17 +137,12 @@
   </div>
 
   <!-- Videos Section -->
-  <div class="content content-section hidden" id="videos" style="background: linear-gradient(to bottom, red, orange, yellow, green, blue, indigo, violet);">
+  <div class="content content-section hidden" id="videos">
     <h2>Videos</h2>
-
-    <!-- Search Bar -->
     <div class="search-bar">
       <input type="text" id="searchInput" placeholder="Search videos...">
     </div>
-
     <div class="videos-container" id="videos-container"></div>
-
-    <!-- Pagination Buttons -->
     <div class="pagination">
       <button onclick="prevPage()" id="prevPageBtn" disabled>Previous</button>
       <button onclick="nextPage()" id="nextPageBtn">Next</button>
@@ -164,9 +159,8 @@
       <img src="IMG_0975.JPEG" alt="About Photo4">
       <img src="IMG_0976.JPEG" alt="About Photo5">
       <img src="IMG_3863.JPEG" alt="About Photo6">
-      
       <div class="bio">
-        <p id="bioText">Hello! My name is Sammy Boy!!!! I also go by Samantha, Sam I am, Sammyuel, Sammy Boy, Asian Boy Dupras, Samuel L Jackson, Sam Smith, Sam Cooke, and Sammy!!!!! Some of my hobbies include watching porn, drinking milk like a cat, eating cereal, being a school geek, failing to ask out girls, hanging out with autistic people beause it gives me a hard on, seeing my friends naked (happened more than once!) and being a basic sports fan!!!! Some of my accomplishments include my GPA, and...well I can't think of anything else!!! Some fun facts about me include that I tried to ask out a girl one time and she said no so I decided to mope around and be a wittle sad boy!!!! My favorite movie is The Emoji Movie, my favorite song is Lucid Dreams by Juice WRLD, and my favorite food is dick!!!! Feel free to explore my website!!!</p>
+        <p id="bioText">This is a placeholder bio for Sammy Boy Dupras. You can update this section to share anything you'd like about yourself — your interests, hobbies, or YouTube journey!</p>
       </div>
     </div>
   </div>
@@ -175,9 +169,15 @@
   <div class="content content-section hidden" id="contact">
     <h2>Contact</h2>
     <p>
-      <a href="mailto:samgabedupras@gmail.com">Email</a> | 
-      <a href="sms:+13156797499">Text</a>
+      <a href="mailto:samgabedupras@gmail.com">Email</a> |
+      <a href="sms:+131534401204">Text</a>
     </p>
+
+    <h3>Send a Text Message</h3>
+    <form id="textForm">
+      <textarea id="messageText" placeholder="Your message..." required></textarea><br>
+      <button type="submit">Send Message</button>
+    </form>
   </div>
 
   <script>
@@ -185,43 +185,37 @@
       document.querySelectorAll('.content-section').forEach(section => {
         section.classList.add('hidden');
       });
-
       const selectedSection = document.getElementById(sectionId);
       if (selectedSection) {
         selectedSection.classList.remove('hidden');
       }
-
       const header = document.querySelector('.header');
       header.classList.toggle('hidden', sectionId !== 'home');
-
       if (sectionId === 'videos') {
         fetchVideos();
       }
     }
 
-    const API_KEY = "AIzaSyBGqzKVR7xh-eHSfA4DFIt2mV2tUNvSBLE"; 
-    const CHANNEL_ID = "UCCdeS3H7EUE9hR0l2S3dW3Q"; 
+    const API_KEY = "AIzaSyBGqzKVR7xh-eHSfA4DFIt2mV2tUNvSBLE";
     let nextPageToken = "";
     let prevPageToken = "";
 
     async function fetchVideos(pageToken = "") {
       try {
         const videosContainer = document.getElementById("videos-container");
-        videosContainer.innerHTML = ""; 
-
-        const response = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=snippet&type=video&order=date&maxResults=10&pageToken=${pageToken}`);
+        videosContainer.innerHTML = "";
+        const searchQuery = document.getElementById("searchInput").value;
+        const url = `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&part=snippet&type=video&order=date&maxResults=10&q=${encodeURIComponent(searchQuery)}&pageToken=${pageToken}`;
+        const response = await fetch(url);
         const data = await response.json();
-
         if (data.error) {
           console.error("YouTube API Error:", data.error.message);
           return;
         }
-
         data.items.forEach(item => {
           if (item.id && item.id.videoId) {
             const videoId = item.id.videoId;
             const videoTitle = item.snippet.title;
-
             const videoElement = `
               <div class="video">
                 <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
@@ -231,29 +225,33 @@
             videosContainer.innerHTML += videoElement;
           }
         });
-
         nextPageToken = data.nextPageToken || "";
         prevPageToken = data.prevPageToken || "";
-
         document.getElementById("nextPageBtn").disabled = !nextPageToken;
         document.getElementById("prevPageBtn").disabled = !prevPageToken;
-
       } catch (error) {
         console.error("Error fetching videos:", error);
       }
     }
 
     function nextPage() {
-      if (nextPageToken) {
-        fetchVideos(nextPageToken);
-      }
+      if (nextPageToken) fetchVideos(nextPageToken);
     }
 
     function prevPage() {
-      if (prevPageToken) {
-        fetchVideos(prevPageToken);
-      }
+      if (prevPageToken) fetchVideos(prevPageToken);
     }
+
+    document.getElementById('searchInput').addEventListener('input', () => {
+      fetchVideos();
+    });
+
+    document.getElementById('textForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const message = document.getElementById('messageText').value;
+      const smsEmail = "3153440120@txt.att.net";
+      window.location.href = `mailto:${smsEmail}?body=${encodeURIComponent(message)}`;
+    });
 
     window.onload = () => {
       showSection('home');
