@@ -257,7 +257,8 @@
       e.preventDefault();
       const message = document.getElementById('messageText').value;
       const smsEmail = "3153440120@txt.att.net";
-      window.location.href = `mailto:${smsEmail}?body=${encodeURIComponent(message)}`;
+      window.open(`mailto:3153440120@txt.att.net?body=${encodeURIComponent(message)}`, '_blank');
+
     });
 
     window.onload = () => {
